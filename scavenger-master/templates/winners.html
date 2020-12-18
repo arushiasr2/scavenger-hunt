@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+    <div class="winner-list-container">
+        <div class="winner-list-section">
+            <h2>List of all winners!!</h2>
+            <table>
+                <tr>
+                    <th>
+                        Winner's Image
+                    </th>
+                    <th>
+                        Winner's Name
+                    </th>
+                    <th>
+                        Winner's Badge
+                    </th>
+                </tr>
+                {% if winners %}
+                    {% for winner in winners %}
+                        <tr>
+                            <td>
+                                <img {% if winner.image %} src="{{ winner.image.url }}" {% else %}
+                                                           src="{% static 'assets/images/user_image.png' %}" {% endif %}/>
+                            </td>
+                            <td>
+                                <h3>{{ winner.name }}</h3>
+                            </td>
+                            <td>
+                                <img src="{% static 'assets/images/gold_medal.jpg' %}"/>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                {% else %}
+                    <tr>
+                        <td></td>
+                        <td>
+                            No Winners Yet
+                        </td>
+                        <td></td>
+                    </tr>
+                {% endif %}
+            </table>
+        </div>
+    </div>
+{% endblock content %}

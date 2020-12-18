@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+{% block content %}
+    <div class="questions-section-container">
+        <div id="main-div" class="questions-section-content">
+            <h2>Answer the following questions</h2>
+            <form action="{% url 'question' %}" method="post">
+                {% csrf_token %}
+                {% for ques in questions %}
+                    <div class="question-container">
+                    <h3 style="display: flex; justify-content: flex-start"><span>Ques-{{ forloop.counter }}.</span> <span style="width: 90%">{{ ques.question }}</span></h3>
+                    <input name="question{{ forloop.counter }}" value="{{ ques.question }}" type="hidden"/>
+                    <div class="answer-section">
+                        <h3>Ans.</h3>
+                        <div>
+                            {% for option in ques.option.all %}
+                                <div style="display: flex;align-items: center">
+                                    <input type="radio" name="answer{{ forloop.parentloop.counter }}"
+                                           value="{{ option.choice }}">
+                                    <label for="answer{{ forloop.counter }}">{{ option.choice }}</label>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% endfor %}
+                </div>
+                <div class="start-button-container">
+                    <input class="start-button" type="submit" id="submit-button" value="Submit Answer"/>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock content %}
+
+{% block script %}
+    <script>
+        $(document).ready(function () {
+            let phrase = "Together we build University of Tomorrow"
+            localStorage.getItem('input1') && $("#input1").text(localStorage.getItem('input1'))
+            localStorage.getItem('input2') && $("#input2").text(localStorage.getItem('input2'))
+            localStorage.getItem('input3') && $("#input3").text(localStorage.getItem('input3'))
+            localStorage.getItem('input4') && $("#input4").text(localStorage.getItem('input4'))
+            localStorage.getItem('input5') && $("#input5").text(localStorage.getItem('input5'))
+            localStorage.getItem('input6') && $("#input6").text(localStorage.getItem('input6'))
+            let output = localStorage.getItem("input1") + " " + localStorage.getItem("input2") + " " + localStorage.getItem("input3") + " " + localStorage.getItem("input4") + " " + localStorage.getItem("input5") + " " + localStorage.getItem("input6")
+            if (phrase !== output) {
+                window.location.replace("http://localhost:8000")
+            }
+            $("#submit-button").click(() => {
+                let answer1 = $('input[name="answer1"]:checked').val();
+                let answer2 = $('input[name="answer2"]:checked').val();
+            })
+            $(":radio").change(function () {
+                var names = {};
+                $(':radio').each(function () {
+                    names[$(this).attr('name')] = true;
+                });
+                var count = 0;
+                $.each(names, function () {
+                    count++;
+                });
+                if ($(':radio:checked').length === count) {
+                    $("#submit-button").addClass('active')
+                }
+            }).change();
+        })
+    </script>
+{% endblock script %}

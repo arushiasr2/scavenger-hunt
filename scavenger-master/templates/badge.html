@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+    <div class="winners-section-container">
+        <div class="winners-section">
+            <div class="gold">
+                {% if request.session.count == 5 %}
+                    <h2>Hurray!! You have earned a badge!</h2>
+                    <img src="{% static "assets/images/gold_medal.jpg" %}"/>
+                    <h2 style="color : #fccd0f">Gold Medal</h2>
+                    <div class="winners-content">
+                        <form action="{% url 'badge' %}" method="post" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <div>
+                                <label for="name">Name : </label>
+                                <input style="width: 80%; margin-bottom: 10px;" type="text" name="name" id="name"
+                                       required/>
+                            </div>
+                            <div>
+                                <label for="image" style="margin-right: 10px;">Please upload your image
+                                    (optional): </label>
+                                <input type="file" name="image">
+                            </div>
+                            <div class="start-button-container">
+                                <input class="start-button" id="submit-button" type="submit" value="Submit"/>
+                            </div>
+                        </form>
+                        <a href="{% url 'winners' %}">View this week's winners</a>
+                    </div>
+                {% elif request.session.count == 4 %}
+                    <h2>Hurray!! You have earned a badge!</h2>
+                    <img src="{% static "assets/images/silver_medal.jpg" %}"/>
+                    <h2 style="color : #fccd0f">Silver Medal</h2>
+                    <div class="winners-content">
+                        <a href="{% url 'winners' %}">View this week's winners</a>
+                    </div>
+                {% elif request.session.count == 3 %}
+                    <h2>Hurray!! You have earned a badge!</h2>
+                    <img src="{% static "assets/images/bronze_medal.jpg" %}"/>
+                    <h2 style="color : #fccd0f">Bronze Medal</h2>
+                    <div class="winners-content">
+                        <a href="{% url 'winners' %}">View this week's winners</a>
+                    </div>
+                {% elif request.session.count < 3 %}
+                    <div style="height: 100%; display: flex; align-items: center; flex-direction: column; justify-content: center;">
+                        <h2>Better Luck Next Time</h2>
+                        <div class="winners-content">
+                            <a href="{% url 'winners' %}">View this week's winners</a>
+                        </div>
+                    </div>
+                {% elif not request.session.count %}
+                    <div style="height: 100%; display: flex; align-items: center; flex-direction: column; justify-content: center;">
+                        <h2>Please complete Step 1 and Step 2 </h2>
+                        <div class="winners-content">
+                            <a href="{% url 'index' %}">Return to Home Page</a>
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock content %}
+
+{% block script %}
+    <script>
+        {#localStorage.clear()#}
+        $(document).ready(function () {
+            $("#name").keyup(() => {
+                $("#submit-button").addClass('active')
+            })
+        })
+
+    </script>
+{% endblock script %}

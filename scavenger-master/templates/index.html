@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% block content %}
+    <div class="content">
+        <h2>Welcome to Scavenger Hunt</h2>
+        <p>Play this game! All you have to do is answer all the questions correctly. Winners will be given the chance to secure a spot on our winner list! List updated every week.</p>
+        <div class="bar-code-response">
+            <p id="input1">##########</p>
+            <p id="input2">##########</p>
+            <p id="input3">##########</p>
+            <p id="input4">##########</p>
+            <p id="input5">##########</p>
+            <p id="input6">##########</p>
+        </div>
+        <div class="start-button-container">
+            <button class="start-button" id="start">Go to Questions Page</button>
+        </div>
+    </div>
+{% endblock content %}
+
+{% block script %}
+    <script>
+
+        $(document).ready(function () {
+            const query_param = new URLSearchParams(window.location.search)
+            let phrase = "Together we build University of Tomorrow"
+            query_param.get('input1') && localStorage.setItem("input1", query_param.get('input1'))
+            query_param.get('input2') && localStorage.setItem("input2", query_param.get('input2'))
+            query_param.get('input3') && localStorage.setItem("input3", query_param.get('input3'))
+            query_param.get('input4') && localStorage.setItem("input4", query_param.get('input4'))
+            query_param.get('input5') && localStorage.setItem("input5", query_param.get('input5'))
+            query_param.get('input6') && localStorage.setItem("input6", query_param.get('input6'))
+            localStorage.getItem('input1') && $("#input1").text(localStorage.getItem('input1'))
+            localStorage.getItem('input2') && $("#input2").text(localStorage.getItem('input2'))
+            localStorage.getItem('input3') && $("#input3").text(localStorage.getItem('input3'))
+            localStorage.getItem('input4') && $("#input4").text(localStorage.getItem('input4'))
+            localStorage.getItem('input5') && $("#input5").text(localStorage.getItem('input5'))
+            localStorage.getItem('input6') && $("#input6").text(localStorage.getItem('input6'))
+            let output = localStorage.getItem("input1") + " " + localStorage.getItem("input2") + " " + localStorage.getItem("input3") + " " + localStorage.getItem("input4") + " " + localStorage.getItem("input5") +  " " + localStorage.getItem("input6")
+            if (phrase === output) {
+                $("#start").addClass("active")
+            } else {
+                $("#start").removeClass("active")
+            }
+            $("#start").click(() => {
+                phrase === output ? window.location.replace("http://localhost:8000/questions") : alert("Sorry! That won't work here")
+            })
+        })
+
+    </script>
+{% endblock script %}
